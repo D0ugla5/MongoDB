@@ -45,13 +45,7 @@ export class VehiclesService {
   }
 
   async update(plate: string, updateVehicleDto: UpdateVehicleDto): Promise<Vehicles> {
-    const { brand, fuelSize, drivers } = updateVehicleDto;
-
     // Verifica se os campos obrigatórios estão presentes!!
-    if (brand === undefined || fuelSize === undefined || drivers === undefined) {
-      throw new BadRequestException('Missing required fields in UpdateVehicleDto');
-    }
-
     const currentDate = new Date(); 
     const updatedBy = "Douglas"; 
 
