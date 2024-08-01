@@ -22,7 +22,6 @@ export class VehiclesService {
 
     const newVehicle = new this.vehiclesModel({
       ...createVehicleDto,
-      console.log('Opa ', createVehicleDto),
       createdDate: currentDate,
       createdBy: createdBy,
     });
