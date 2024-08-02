@@ -1,7 +1,7 @@
 
 import {IsArray, IsNumber, IsOptional, IsString, ValidateNested} from 'class-validator';
 import { Type } from 'class-transformer';
-import { Driver } from '../schemas/driver.schema';
+import { vehicleDrivers } from '../dto/create-vehicle.dto';
 
 
 export class UpdateVehicleDto {
@@ -21,6 +21,6 @@ export class UpdateVehicleDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Driver)
-  readonly drivers?: Driver[];
+  @Type(() => vehicleDrivers)
+  readonly drivers: Array<vehicleDrivers>
 }

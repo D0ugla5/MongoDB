@@ -1,7 +1,7 @@
 // user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Driver, DriverSchema } from './driver.schema';
+import { vehicleDrivers } from '../dto/create-vehicle.dto';
 
 export type VehiclesDocument = Vehicles & Document;
 
@@ -17,8 +17,12 @@ export class Vehicles {
   @Prop()
   fuelSize: number;
 
-  @Prop({ type: [DriverSchema] })
-  drivers: Array<Driver>;
+  @Prop({ type: [{ name: { type: String, required: true }, id: { type: String, required: true }, _id:false }] })
+  /* @ValidateNested({ each: true })
+  @Type(() => Driver)
+  readonly drivers: Array<Driver>; */
+  drivers: Array<vehicleDrivers>
+
   //Date.now é uma function que retorna o horário atual.
   @Prop({ default: Date.now })
   createdDate: Date;

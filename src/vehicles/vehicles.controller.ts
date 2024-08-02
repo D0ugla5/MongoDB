@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
@@ -9,6 +9,7 @@ export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
   @Post()
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async create(@Body() createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
     return this.vehiclesService.create(createVehicleDto);
   }
@@ -22,8 +23,9 @@ export class VehiclesController {
   async findOne(@Param('plate') plate: string): Promise<Vehicles> {
     return this.vehiclesService.findOne(plate);
   }
-  //PUT PUT PUT
+
   @Put(':plate')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async update(@Param('plate') plate: string, @Body() updateVehicleDto: UpdateVehicleDto): Promise<Vehicles> {
     return this.vehiclesService.update(plate, updateVehicleDto);
   }

@@ -1,6 +1,5 @@
 import {IsArray, IsNotEmpty,IsNumber, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { Driver } from '../schemas/driver.schema';
+
 
 export class CreateVehicleDto {
   //Same
@@ -8,14 +7,26 @@ export class CreateVehicleDto {
   @IsString()
   readonly plate: string;
 
+  @IsNotEmpty()
   @IsString()
   readonly brand: string;
   
+  @IsNotEmpty()
   @IsNumber()
   readonly fuelSize: number;
   
+  @IsNotEmpty()
   @IsArray()
-  @ValidateNested({ each: true })
+  /* @ValidateNested({ each: true })
   @Type(() => Driver)
-  readonly drivers: Array<Driver>;
+  readonly drivers: Array<Driver>; */
+  readonly drivers: Array<vehicleDrivers>
+}
+export class vehicleDrivers{
+  @IsNotEmpty()
+  @IsString()
+  nome:string;
+  @IsNotEmpty()
+  @IsString()
+  id:string
 }

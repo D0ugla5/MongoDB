@@ -10,25 +10,25 @@ export class VehiclesService {
   constructor(@InjectModel(Vehicles.name) private vehiclesModel: Model<VehiclesDocument>) {}
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
-    const { plate, brand, fuelSize, drivers } = createVehicleDto;
-
-    // Verifica se os campos obrigatórios estão presentes
-    if (!plate || !brand || !fuelSize || !drivers || drivers.length === 0) {
-      throw new BadRequestException('Está faltando coisa ai meu ousado !');
-    }
-
     const currentDate = new Date(); 
     const createdBy = "Douglas"; 
+
+    createVehicleDto.drivers.forEach(drivers => {
+      if (!drivers.nome || !drivers.id) {
+        throw new BadRequestException('Invalid driver data. Ensure all drivers have a name and ID.');
+      }
+    });
+
 
     const newVehicle = new this.vehiclesModel({
       ...createVehicleDto,
       createdDate: currentDate,
       createdBy: createdBy,
     });
-
     console.log('Passando pelo Insert');
     return newVehicle.save();
   }
+
 
   async findAll(): Promise<Vehicles[]> {
     console.log('Passando pelo Find'); 
@@ -59,7 +59,7 @@ export class VehiclesService {
       { new: true, runValidators: true } // Valida os dados
     );
     if (!vehicle) {
-      throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again.`);
+      throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again Boy!`);
     }
     console.log('Passando pelo Update');
     return vehicle;
@@ -68,7 +68,7 @@ export class VehiclesService {
   async remove(plate: string): Promise<{ deletedAt: Date; deletedBy: string }> {
     const result = await this.vehiclesModel.findOneAndDelete({ plate }).exec();
     if (!result) {
-      throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again.`);
+      throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again Boy!`);
     }
     console.log('Passando pelo Delete');
     return {
