@@ -9,6 +9,9 @@ import { IsEmpty } from 'class-validator';
 @Injectable()
 export class VehiclesService {
   //constructor pesquisar sobre ->
+  //Injetar dependências na classe, permitindo que os serviços, controladores e outros componentes utilizem essas dependências.  
+  // Decorator que indica ao framework que ele deve injetar um modelo Mongoose específico nesta propriedade.
+  //This module uses the forFeature() method to define which models are registered in the current scope. With that in place, we can inject the UserModel into the UsersService using the @InjectModel() decorator:
   constructor(@InjectModel(Vehicles.name) private vehiclesModel: Model<VehiclesDocument>) {}
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
