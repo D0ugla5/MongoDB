@@ -5,6 +5,7 @@ import { vehicleDrivers } from '../dto/create-vehicle.dto';
 
 export type VehiclesDocument = Vehicles & Document;
 
+//O que é schemas
 @Schema()
 export class Vehicles {
   //'@Prop' é a validação se o objeto é aquilo que se pede, ele difine o objeto.

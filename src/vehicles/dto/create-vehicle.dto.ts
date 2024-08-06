@@ -25,7 +25,7 @@ export class CreateVehicleDto {
 export class vehicleDrivers{
   @IsNotEmpty()
   @IsString()
-  nome:string;
+  name:string;
   @IsNotEmpty()
   @IsString()
   id:string

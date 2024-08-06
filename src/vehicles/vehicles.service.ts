@@ -1,25 +1,27 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateVehicleDto } from './dto/create-vehicle.dto';
+import { CreateVehicleDto, vehicleDrivers } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { Vehicles, VehiclesDocument } from './schemas/vehicles.schema';
+import { IsEmpty } from 'class-validator';
 
 @Injectable()
 export class VehiclesService {
+  //constructor pesquisar sobre ->
   constructor(@InjectModel(Vehicles.name) private vehiclesModel: Model<VehiclesDocument>) {}
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
     const currentDate = new Date(); 
     const createdBy = "Douglas"; 
 
-    createVehicleDto.drivers.forEach(drivers => {
-      if (!drivers.nome || !drivers.id) {
-        throw new BadRequestException('Invalid driver data. Ensure all drivers have a name and ID.');
+    // Validar drivers
+    createVehicleDto.drivers.forEach(vehicleDrivers => {
+      if (!vehicleDrivers.name || !vehicleDrivers.id) {
+        throw new BadRequestException('Está faltando o ID ou o Nome!');
       }
     });
-
-
+    
     const newVehicle = new this.vehiclesModel({
       ...createVehicleDto,
       createdDate: currentDate,
@@ -28,7 +30,6 @@ export class VehiclesService {
     console.log('Passando pelo Insert');
     return newVehicle.save();
   }
-
 
   async findAll(): Promise<Vehicles[]> {
     console.log('Passando pelo Find'); 
@@ -45,9 +46,22 @@ export class VehiclesService {
   }
 
   async update(plate: string, updateVehicleDto: UpdateVehicleDto): Promise<Vehicles> {
-    // Verifica se os campos obrigatórios estão presentes!!
     const currentDate = new Date(); 
     const updatedBy = "Douglas"; 
+
+    // Validar drivers se existir no update
+    if (updateVehicleDto.drivers) {
+      updateVehicleDto.drivers.forEach(driver => {
+        if (!driver.name || !driver.id) {
+          throw new BadRequestException('Está faltando o ID ou o Name!');
+        }
+      });
+    }
+
+    // Validar fuelSize se existir no update
+    if (updateVehicleDto.fuelSize != null && typeof updateVehicleDto.fuelSize !== 'number') {
+      throw new BadRequestException('O campo fuelSize deve ser um número.');
+    }
 
     const vehicle = await this.vehiclesModel.findOneAndUpdate(
       { plate },

@@ -8,7 +8,7 @@ import { Vehicles } from './schemas/vehicles.schema';
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) {}
 
-  @Post()
+  @Post()                        //HABILITA O WHITE LIST  - - O QUE É WHITE LIST
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async create(@Body() createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
     return this.vehiclesService.create(createVehicleDto);
