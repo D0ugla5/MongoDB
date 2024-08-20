@@ -8,7 +8,7 @@ import { Vehicles, VehiclesSchema } from './schemas/vehicles.schema';
   //Schema  EXATAMENTE ISSO, OQUE ISSO FAZ ?
   // forFeature -> Utilizado para registrar modelos específicos dentro de um módulo. Permite que o módulo NestJS saiba quais modelos Mongoose estarão disponíveis dentro do contexto deste módulo. Modelo Mongoose a ser registrado. 
   
-                                                  //Duas propriedades:
+                                                  //Duas propriedades: 
   imports: [MongooseModule.forFeature([{ name: Vehicles.name, schema: VehiclesSchema }])],
   //
   controllers: [VehiclesController],

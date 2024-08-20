@@ -1,7 +1,6 @@
 import {IsArray, IsNotEmpty,IsNumber, IsString, ValidateNested } from 'class-validator';
 
-dto -> Data Transfer Object
-  
+
 export class CreateVehicleDto {
   //Same
   @IsNotEmpty()

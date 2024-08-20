@@ -5,8 +5,9 @@ import { vehicleDrivers } from '../dto/create-vehicle.dto';
 
 export type VehiclesDocument = Vehicles & Document;
 
-//O que é schemas
+//O que é schemas -> É um armazenador de informação que passará dados revisados adiante no código, pode ser usado para diversas utilizações.
 @Schema()
+//plan keys and indexes that are fast and effective for application queries and that complement workflow patterns.
 export class Vehicles {
   //'@Prop' é a validação se o objeto é aquilo que se pede, ele difine o objeto.
   @Prop({ required: true })
