@@ -6,8 +6,8 @@ import { VehiclesModule } from './vehicles/vehicles.module';
   imports: [
     //Conecta ao Mongo Pelo Shell
     /* mongosh "mongodb+srv://vehicles-cluster.3hwozjm.mongodb.net/" --apiVersion 1 --username Douglas */
-    //Conecta pelo mod VS Code + mongoDB
-    MongooseModule.forRoot('mongodb+srv://Douglas:Dg87@vehicles-cluster.3hwozjm.mongodb.net/'), // Conecta ao MongoDB
+    
+    MongooseModule.forRoot('mongodb+srv://Douglas:Dg87@vehicles-cluster.3hwozjm.mongodb.net/'), // Conecta ao MongoDB pelo modo VS Code + mongoDB
     VehiclesModule,
   ],
 })

@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateVehicleDto, vehicleDrivers } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { Vehicles, VehiclesDocument } from './schemas/vehicles.schema';
+import { Vehicle } from './entities/vehicle.entity';
 
 @Injectable()
 export class VehiclesService {
@@ -14,32 +15,37 @@ export class VehiclesService {
                                                                  //LE e cria para o MDB
   //Constructors essentially allow the creation of objects from classes.
   //Permite criar objetos de classes
+  //injectModel -> constante do mongoose
   constructor(@InjectModel(Vehicles.name) private vehiclesModel: Model<VehiclesDocument>) {}
-
-  async create(createVehicleDto: CreateVehicleDto): Promise<Vehicles> {
+  
+  async create(createVehicleDto: CreateVehicleDto, vehicleDrivers:string): Promise<Vehicles> {
     const currentDate = new Date(); 
     const createdBy = "Douglas"; 
 
     // Validar drivers
     //Funcional
-    createVehicleDto.drivers.forEach(vehicleDrivers => {
+    //repete para cada elemento
+   /*  createVehicleDto.drivers.forEach(vehicleDrivers => {
       if (!vehicleDrivers.name || !vehicleDrivers.id) {
-        throw new BadRequestException("You're missing the name or ID from driver!");
+        throw new BadRequestException("You're missing the name or ID from drivers!");
       }
-    });
-    
+    }); */
+    //funcional também só que do método mais mongoose.
+    const isValid = mongoose.Types.ObjectId.isValid(vehicleDrivers);
+    if (!isValid) throw new HttpException("Drivers not in the right padron, try again!", 404)
     const newVehicle = new this.vehiclesModel({
       ...createVehicleDto,
       createdDate: currentDate,
       createdBy: createdBy,
     });
-    console.log('Passando pelo Insert');
+    //testando
+    console.log('Using insert');
     return newVehicle.save();
   }
 
   async findAll(): Promise<Vehicles[]> {
-    console.log('Passando pelo Find'); 
-    return this.vehiclesModel.find().exec(); // Executa a Query e retorna os vehicles
+    console.log('Using Find all'); 
+    return this.vehiclesModel.find().exec(); // Executa a Query (consulta) e retorna os vehicles
   }
 
   async findOne(plate: string): Promise<Vehicles> {
@@ -47,7 +53,8 @@ export class VehiclesService {
     if (!vehicle) {
       throw new NotFoundException(`Vehicle with plate ${plate} deleted, modified or does not exist. Try again Boy!`);
     }
-    console.log('Passando pelo FindOne');
+    //testando d novo
+    console.log('Using FindOne');
     return vehicle;
   }
 
@@ -82,7 +89,8 @@ export class VehiclesService {
     if (!vehicle) {
       throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again Boy!`);
     }
-    console.log('Passando pelo Update');
+    //Again
+    console.log('Using Update');
     return vehicle;
   }
 
@@ -91,7 +99,8 @@ export class VehiclesService {
     if (!result) {
       throw new NotFoundException(`Vehicle with plate ${plate} not found. Try again Boy!`);
     }
-    console.log('Passando pelo Delete');
+    //U know rg
+    console.log('Using Delete');
     return {
       deletedAt: new Date(),
       deletedBy: "Douglas"
